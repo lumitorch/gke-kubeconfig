@@ -54,33 +54,33 @@ class GKEKubeconfig(pulumi.ComponentResource):
         master_auth = args["cluster_master_auth"]
 
         self.kubeconfig = pulumi.Output.all(name, endpoint, master_auth).apply(
-            lambda args: f"""apiVersion: v1
-        clusters:
-        - cluster:
-            certificate-authority-data: {args[2]['cluster_ca_certificate']}
-            server: https://{args[1]}
-          name: {args[0]}
-        contexts:
-        - context:
-            cluster: {args[0]}
-            user: {args[0]}
-          name: {args[0]}
-        current-context: {args[0]}
-        kind: Config
-        preferences: {{}}
-        users:
-        - name: {args[0]}
-          user:
-            exec:
-              apiVersion: client.authentication.k8s.io/v1beta1
-              command: gke-gcloud-auth-plugin
-              env: null
-              installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
-                https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-              interactiveMode: IfAvailable
-              provideClusterInfo: true
-        """
-        )
+            lambda args: f"""
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: {args[2]['cluster_ca_certificate']}
+    server: https://{args[1]}
+  name: {args[0]}
+contexts:
+- context:
+    cluster: {args[0]}
+    user: {args[0]}
+  name: {args[0]}
+current-context: {args[0]}
+kind: Config
+preferences: {{}}
+users:
+- name: {args[0]}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: gke-gcloud-auth-plugin
+      env: null
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      interactiveMode: IfAvailable
+      provideClusterInfo: true
+""")
 
         self.register_outputs({
             "kubeconfig": self.kubeconfig
