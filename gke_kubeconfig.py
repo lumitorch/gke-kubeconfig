@@ -55,31 +55,31 @@ class GKEKubeconfig(pulumi.ComponentResource):
 
         self.kubeconfig = pulumi.Output.format(
             """
-            apiVersion: v1
-            clusters:
-            - cluster:
-                certificate-authority-data: {2}
-                server: https://{1}
-              name: {0}
-            contexts:
-            - context:
-                cluster: {0}
-                user: {0}
-              name: {0}
-            current-context: {0}
-            kind: Config
-            preferences: {{}}
-            users:
-            - name: {0}
-              user:
-                exec:
-                  apiVersion: client.authentication.k8s.io/v1beta1
-                  command: gke-gcloud-auth-plugin
-                  env: null
-                  installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
-                    https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-                  interactiveMode: IfAvailable
-                  provideClusterInfo: true
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: {2}
+    server: https://{1}
+  name: {0}
+contexts:
+- context:
+    cluster: {0}
+    user: {0}
+  name: {0}
+current-context: {0}
+kind: Config
+preferences: {{}}
+users:
+- name: {0}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: gke-gcloud-auth-plugin
+      env: null
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      interactiveMode: IfAvailable
+      provideClusterInfo: true
             """,
             name,
             endpoint,
